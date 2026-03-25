@@ -3,10 +3,11 @@ package com.itheima.service.impl;
 import com.itheima.mapper.UserMapper;
 import com.itheima.pojo.User;
 import com.itheima.service.UserService;
+import com.itheima.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 @Service  // 确保有这个注解
 public class UserServiceImpl implements UserService {
@@ -40,7 +41,6 @@ public class UserServiceImpl implements UserService {
         System.out.println("  性别: [" + user.getUserSex() + "]");
         System.out.println("  密码(MD5): [" + user.getUserPassword() + "]");
 
-        // 1. 参数校验
         if (user.getUserTel() == null || user.getUserTel().isEmpty()) {
             throw new IllegalArgumentException("手机号不能为空");
         }
@@ -48,14 +48,12 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("密码不能为空");
         }
 
-        // 去除手机号前后空格
         String trimmedTel = user.getUserTel().trim();
         if (!trimmedTel.equals(user.getUserTel())) {
             System.out.println("⚠️ 手机号有前后空格，已去除: [" + trimmedTel + "]");
             user.setUserTel(trimmedTel);
         }
 
-        // 2. 保存完整的用户信息到数据库
         int result = userMapper.insertUser(user);
 
         if (result > 0) {
@@ -64,5 +62,12 @@ public class UserServiceImpl implements UserService {
             System.out.println("❌ 用户注册失败");
             throw new RuntimeException("用户注册失败");
         }
+    }
+
+    @Override
+    public void updatePwd(String newPwd) {
+        Map<String,Object> map = ThreadLocalUtil.get();
+        String usertel = (String) map.get("usertel");
+            userMapper.updatePwd(usertel, newPwd);
     }
 }

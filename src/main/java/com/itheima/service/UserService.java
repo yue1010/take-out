@@ -9,4 +9,7 @@ public interface UserService {
 
     //注册
     public void register(User user);
+
+    //更新用户密码
+    public void updatePwd(String newPwd);
 }
