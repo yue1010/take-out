@@ -1,77 +1,26 @@
-import java.time.LocalDateTime;
-public class UserAdd {
+package com.itheima.pojo;
+
+import lombok.Data;
+import java.io.Serializable;
+
+@Data
+public class UserAdd implements Serializable {
+    // 地址编号（char(10)）
     private String adrId;
+    // 收货人
     private String receiver;
-    private String sex;
-    private String ridTel;
+    // 收货人性别
+    private String reSex;
+    // 联系电话
+    private String reTel;
+    // 省份
+    private String province;
+    // 城市
     private String city;
+    // 区县
     private String region;
+    // 详细地址
     private String detailedAdd;
-    private String userNo;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
-
-    public String getAdrId() {
-        return adrId;
-    }
-
-    public void setAdrId(String adrId) {
-        this.adrId = adrId;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getRidTel() {
-        return ridTel;
-    }
-
-    public void setRidTel(String ridTel) {
-        this.ridTel = ridTel;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getDetailedAdd() {
-        return detailedAdd;
-    }
-
-    public void setDetailedAdd(String detailedAdd) {
-        this.detailedAdd = detailedAdd;
-    }
-
-    public String getUserNo() {
-        return userNo;
-    }
-
-    public void setUserNo(String userNo) {
-        this.userNo = userNo;
-    }
+    // 所属用户编号（外键）
+    private Integer userNo;
 }
