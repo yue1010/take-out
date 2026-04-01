@@ -9,6 +9,8 @@ import com.itheima.service.UserAddService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserAddServiceImpl implements UserAddService {
 
@@ -34,5 +36,16 @@ public class UserAddServiceImpl implements UserAddService {
         userAddMapper.insert(userAdd);
 
         return Result.success("添加地址成功");
+    }
+
+    // 👇 只追加这一段，原有代码不动
+    @Override
+    public Result listAddress(String usertel) {
+        User user = userMapper.findUserByTel(usertel);
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+        List<UserAdd> addressList = userAddMapper.selectListByUserNo(user.getUserNo());
+        return Result.success(addressList);
     }
 }

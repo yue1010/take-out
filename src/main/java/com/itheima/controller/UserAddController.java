@@ -70,4 +70,33 @@ public class UserAddController {
             return Result.error("token无效或已过期");
         }
     }
+
+    // 👇 只追加这个 GET 接口，原有代码不动
+    @GetMapping("/list")
+    public Result list(@RequestHeader(name = "Authorization", required = false) String token) {
+        if (token == null || token.isEmpty()) {
+            return Result.error("未登录，请先登录");
+        }
+
+        try {
+            Map<String, Object> map = JwtUtil.parseToken(token);
+            String usertel = null;
+
+            if (map.containsKey("tel")) {
+                usertel = (String) map.get("tel");
+            } else if (map.containsKey("usertel")) {
+                usertel = (String) map.get("usertel");
+            }
+
+            if (usertel == null) {
+                return Result.error("token无效");
+            }
+
+            return userAddService.listAddress(usertel);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("token无效或已过期");
+        }
+    }
 }
