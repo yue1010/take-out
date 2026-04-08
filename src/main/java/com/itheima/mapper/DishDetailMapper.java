@@ -37,4 +37,6 @@ public interface DishDetailMapper {
             "LEFT JOIN Ingredient i ON id.ingr_id = i.ingr_id " +
             "WHERE id.dish_id = #{dishId}") // 改：dish_id → dishId
     List<Ingredient> getIngredientsByDishId(Integer dishId); // 方法参数名改
+
+
 }
