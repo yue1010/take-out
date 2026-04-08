@@ -27,4 +27,13 @@ public class JwtUtil {
                 .asMap();
     }
 
+    // 从token中获取用户编号 userNo
+    public static Integer getUserIdFromToken(String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        Map<String, Object> map = parseToken(token);
+        return (Integer) map.get("userNo");
+    }
+
 }

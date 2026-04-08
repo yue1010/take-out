@@ -12,4 +12,6 @@ public interface UserService {
 
     //更新用户密码
     public void updatePwd(String newPwd);
+
+    void update(User user);
 }

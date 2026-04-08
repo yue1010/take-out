@@ -70,4 +70,9 @@ public class UserServiceImpl implements UserService {
         String usertel = (String) map.get("usertel");
             userMapper.updatePwd(usertel, newPwd);
     }
+
+    @Override
+    public void update(User user) {
+        userMapper.update(user);
+    }
 }

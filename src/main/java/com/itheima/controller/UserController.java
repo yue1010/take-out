@@ -182,4 +182,8 @@ public class UserController {
         return Result.success();
     }
     // ========== 调试接口结束 ==========
+    @PutMapping("/update") public Result update(@RequestBody User user){
+        userService.update(user);
+        return Result.success();
+    }
 }

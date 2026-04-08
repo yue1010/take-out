@@ -1,11 +1,19 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # 补充关键连接参数，解决连接/查询静默失败问题
-    url: jdbc:mysql://localhost:3306/takeout?serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/takeout?serverTimezone=Asia/Shanghai
     username: root
     password: 123456
 
+  mybatis:
+    configuration:
+      map-underscore-to-camel-case: true
+      mybatis-plus:
+        # 扫描 resources/mapper 下的所有 XML 文件
+        mapper-locations: classpath:mapper/*.xml
+        # 开启驼峰命名映射（可选，建议添加）
+        configuration:
+          map-underscore-to-camel-case: true
 # MyBatis 配置（适配注解版Mapper，删除无效的mapper-locations）
 mybatis:
   configuration:
