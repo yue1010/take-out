@@ -36,6 +36,9 @@ public interface UserMapper {
             "FROM users")
     List<User> findAllUsers();
 
+    @Update("UPDATE users SET user_name = #{userName}, user_sex = #{userSex} WHERE user_tel = #{userTel}")
+    void updateByUserTel(String userName, String userSex, String userTel);
+
     @Update("UPDATE users SET user_password = #{newPwd} WHERE user_tel = #{usertel}")
     void updatePwd(@Param("usertel") String usertel, @Param("newPwd") String newPwd);
 }
