@@ -65,6 +65,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateByUserTel(String userName, String userSex, String userTel) {
+        userMapper.updateByUserTel(userName, userSex, userTel);
+    }
+
+    @Override
     public void updatePwd(String newPwd) {
         Map<String,Object> map = ThreadLocalUtil.get();
         String usertel = (String) map.get("usertel");

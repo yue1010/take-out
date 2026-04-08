@@ -1,5 +1,6 @@
 package com.itheima.controller;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.itheima.pojo.Result;
 import com.itheima.pojo.User;
 import com.itheima.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@TableName("users")  // 你的表名叫 users！
 @RestController
 @RequestMapping("/user")
 @Validated
@@ -182,8 +184,4 @@ public class UserController {
         return Result.success();
     }
     // ========== 调试接口结束 ==========
-    @PutMapping("/update") public Result update(@RequestBody User user){
-        userService.update(user);
-        return Result.success();
-    }
 }
