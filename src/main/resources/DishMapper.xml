@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.DishMapper">
+
+    <!-- 菜品结果映射 -->
+    <resultMap id="DishResultMap" type="com.itheima.pojo.Dish">
+        <result column="dish_id" property="dishId"/>
+        <result column="dish_name" property="dishName"/>
+        <result column="dish_category" property="dishCategory"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="stock_qty" property="stockQty"/>
+        <result column="mer_id" property="merId"/>
+        <result column="dish_detail_id" property="dishDetailId"/>
+    </resultMap>
+
+    <!-- 简化版：只保留分页，暂时去掉价格比较等易出错条件 -->
+    <select id="findDishByCondition" resultMap="DishResultMap">
+        SELECT
+            d.dish_id,
+            d.dish_name,
+            d.dish_category,
+            dc.category_name,
+            dd.unit_price,
+            dd.stock_qty,
+            dd.mer_id,
+            dd.dish_detail_id
+        FROM dish d
+                 LEFT JOIN dish_categories dc ON d.dish_category = dc.dish_category
+                 LEFT JOIN dish_detail dd ON d.dish_id = dd.dish_id
+            LIMIT #{start}, #{pageSize}
+    </select>
+
+    <!-- 简化版：只查总数，去掉复杂条件 -->
+    <select id="findTotalCount" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM dish d
+                 LEFT JOIN dish_categories dc ON d.dish_category = dc.dish_category
+                 LEFT JOIN dish_detail dd ON d.dish_id = dd.dish_id
+    </select>
+
+</mapper>

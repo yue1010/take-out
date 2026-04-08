@@ -1,10 +1,15 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/takeout?serverTimezone=Asia/Shanghai
+    # 补充关键连接参数，解决连接/查询静默失败问题
+    url: jdbc:mysql://localhost:3306/takeout?serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8
     username: root
     password: 123456
 
-  mybatis:
-    configuration:
-      map-underscore-to-camel-case: true
+# MyBatis 配置（适配注解版Mapper，删除无效的mapper-locations）
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true  # 下划线转驼峰（保留）
+    auto-mapping-behavior: FULL         # 新增：强制自动映射所有字段
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 新增：打印SQL日志（关键！）
+  type-aliases-package: com.itheima.pojo  # 保留（可选）
