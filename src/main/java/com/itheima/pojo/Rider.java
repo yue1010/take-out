@@ -1,3 +1,5 @@
+package com.itheima.pojo;
+
 import java.time.LocalDateTime;
 public class Rider {
     private String ridNo;
