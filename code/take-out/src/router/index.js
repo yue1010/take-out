@@ -22,12 +22,18 @@ const routes = [
   {
     path: '/address',
     name: 'Address',
-    component: Address  // ✅ 这里必须加上！你之前漏了！
+    component: Address
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue')
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  // 👇 只改这一行！！！
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 

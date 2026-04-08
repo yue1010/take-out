@@ -148,7 +148,7 @@ async function handleLogin() {
         localStorage.setItem('token', res.data)
         alert('✅ 登录成功！')
         // 这里换成你项目的首页路由，比如/home
-        router.push('/home')
+        router.push('/address')
       } else {
         alert(res.message || '登录失败，请检查账号密码')
       }
