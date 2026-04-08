@@ -37,7 +37,6 @@
       </div>
 
       <div class="main-content">
-        <!-- 🔥 修复1：动态切换标题 → 查看/修改个人信息 -->
         <div class="tab-header">
           <a href="#" class="tab-link active">{{ isEdit ? '修改个人信息' : '查看个人信息' }}</a>
         </div>
@@ -46,19 +45,19 @@
         <div v-if="!isEdit" v-loading="loading" class="info-view">
           <div class="info-item">
             <label>用户编号：</label>
-            <span>{{ userInfo.user_no || '未获取' }}</span>
+            <span>{{ userInfo.userNo || '未获取' }}</span>
           </div>
           <div class="info-item">
             <label>手机号：</label>
-            <span>{{ userInfo.user_tel || '未获取' }}</span>
+            <span>{{ userInfo.userTel || '未获取' }}</span>
           </div>
           <div class="info-item">
             <label>用户名：</label>
-            <span>{{ userInfo.user_name || '未设置' }}</span>
+            <span>{{ userInfo.userName || '未设置' }}</span>
           </div>
           <div class="info-item">
             <label>性别：</label>
-            <span>{{ userInfo.user_sex || '未设置' }}</span>
+            <span>{{ userInfo.userSex || '未设置' }}</span>
           </div>
           <div class="info-item">
             <label>创建时间：</label>
@@ -83,11 +82,11 @@
             label-width="80px"
             v-loading="saveLoading"
           >
-            <el-form-item label="用户名" prop="user_name">
-              <el-input v-model="form.user_name" placeholder="请输入用户名" />
+            <el-form-item label="用户名" prop="userName">
+              <el-input v-model="form.userName" placeholder="请输入用户名" />
             </el-form-item>
-            <el-form-item label="性别" prop="user_sex">
-              <el-radio-group v-model="form.user_sex">
+            <el-form-item label="性别" prop="userSex">
+              <el-radio-group v-model="form.userSex">
                 <el-radio label="男">男</el-radio>
                 <el-radio label="女">女</el-radio>
               </el-radio-group>
@@ -105,10 +104,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import request from '../api/request.js'
 import '../assets/address.scss'
 
 const router = useRouter()
@@ -117,42 +116,37 @@ const saveLoading = ref(false)
 const isEdit = ref(false)
 const formRef = ref(null)
 
+// 🔥 完全和后端 User 类一致
 const userInfo = reactive({
-  user_no: '',
-  user_tel: '',
-  user_name: '',
-  user_sex: '',
+  userNo: '',
+  userTel: '',
+  userName: '',
+  userSex: '',
   createTime: '',
   updateTime: ''
 })
 
 const form = reactive({
-  user_no: '',
-  user_name: '',
-  user_sex: ''
+  userName: '',
+  userSex: ''
 })
 
 const rules = {
-  user_name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  user_sex: [{ required: true, message: '请选择性别', trigger: 'change' }]
+  userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  userSex: [{ required: true, message: '请选择性别', trigger: 'change' }]
 }
 
 // 获取个人信息
 const getUserInfo = async () => {
   loading.value = true
   try {
-    const token = localStorage.getItem('token')
-    if (!token) {router.push('/login'); return}
-
-    const res = await axios.get('/user/userInfo', {
-      headers: { Authorization: 'Bearer ' + token }
-    })
-
-    if (res.data.code === 0) {
-      Object.assign(userInfo, res.data.data)
-      form.user_no = userInfo.user_no
-      form.user_name = userInfo.user_name
-      form.user_sex = userInfo.user_sex
+    const res = await request.get('/user/userInfo')
+    if (res.code === 0) {
+      Object.assign(userInfo, res.data)
+      form.userName = userInfo.userName
+      form.userSex = userInfo.userSex
+    } else {
+      ElMessage.error(res.msg || '获取失败')
     }
   } catch (e) {
     ElMessage.error('获取信息失败')
@@ -161,27 +155,23 @@ const getUserInfo = async () => {
   }
 }
 
-// 🔥 修复2 + 修复3：保存成功 + 更新时间自动刷新
+// 保存修改（100%匹配后端）
 const saveEdit = async () => {
+  if (!formRef.value) return
   await formRef.value.validate()
   saveLoading.value = true
-  try {
-    const token = localStorage.getItem('token')
-    const res = await axios.post('/user/update', form, {
-      headers: { Authorization: 'Bearer ' + token }
-    })
 
-    if (res.data.code === 0 || res.data.code === 1) {
-      ElMessage.success('保存成功 ✅')
+  try {
+    const res = await request.put('/user/update', form)
+    if (res.code === 0) {
+      ElMessage.success('保存成功！')
       isEdit.value = false
-      getUserInfo() // 🔥 保存后重新拉取数据 → 更新时间自动变
+      getUserInfo() // 重新加载最新数据
     } else {
-      ElMessage.error('保存失败')
+      ElMessage.error(res.msg || '保存失败')
     }
   } catch (err) {
-    ElMessage.success('保存成功（本地已同步）✅')
-    isEdit.value = false
-    getUserInfo() // 即使接口异常，前端也同步更新时间
+    ElMessage.error('保存失败')
   } finally {
     saveLoading.value = false
   }
@@ -189,8 +179,8 @@ const saveEdit = async () => {
 
 const cancelEdit = () => {
   isEdit.value = false
-  form.user_name = userInfo.user_name
-  form.user_sex = userInfo.user_sex
+  form.userName = userInfo.userName
+  form.userSex = userInfo.userSex
 }
 
 const logout = () => {
@@ -203,7 +193,7 @@ const logout = () => {
 const toggleDropdown = (e) => {
   e.stopPropagation()
   const dropdown = document.getElementById('userDropdown')
-  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block'
+  if (dropdown) dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block'
 }
 const closeDropdown = () => {
   const dropdown = document.getElementById('userDropdown')
@@ -214,11 +204,6 @@ onMounted(() => {
   getUserInfo()
   document.getElementById('userDropdownBtn').addEventListener('click', toggleDropdown)
   document.addEventListener('click', closeDropdown)
-})
-
-onUnmounted(() => {
-  document.getElementById('userDropdownBtn').removeEventListener('click', toggleDropdown)
-  document.removeEventListener('click', closeDropdown)
 })
 </script>
 
