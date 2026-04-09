@@ -75,7 +75,7 @@ public class UserController {
             Map<String, Object> claims = new HashMap<>();
 
             claims.put("usertel", u.getUserTel());
-
+            claims.put("userNo", u.getUserNo());
             String token = JwtUtil.genToken(claims);
             System.out.println("登录成功，token：" + token);
             return Result.success(token);
@@ -149,6 +149,22 @@ public class UserController {
             return Result.success(claims);
         } catch (Exception e) {
             return Result.error("token解析失败: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody User user, @RequestHeader("Authorization") String token) {
+        try {
+            // 解析 token 拿手机号
+            var claims = JwtUtil.parseToken(token);
+            String userTel = claims.get("usertel").toString();
+
+            // 调用手写 SQL，绝对不使用 MP 方法
+            userService.updateByUserTel(user.getUserName(), user.getUserSex(), userTel);
+            return Result.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("更新失败");
         }
     }
 

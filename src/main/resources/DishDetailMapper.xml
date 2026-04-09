@@ -51,4 +51,16 @@
         WHERE di.dish_id = #{dishId}
     </select>
 
+    <!-- 根据订单ID查询所有明细 -->
+    <select id="selectBySaleId" resultType="com.itheima.pojo.OrderDetail">
+        select order_id, sale_id, dish_detail_id, qty, unit_price
+        from order_detail
+        where sale_id = #{saleId}
+    </select>
+
+    <!-- 插入订单明细（给创建订单用） -->
+    <insert id="insert">
+        insert into order_detail(sale_id, dish_detail_id, qty, unit_price)
+        values(#{saleId}, #{dishDetailId}, #{qty}, #{unitPrice})
+    </insert>
 </mapper>

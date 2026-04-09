@@ -1,5 +1,6 @@
 package com.itheima.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.mapper.DishDetailMapper;
 import com.itheima.pojo.DishDetail;
 import com.itheima.service.DishDetailService;
@@ -7,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DishDetailServiceImpl implements DishDetailService {
+public class DishDetailServiceImpl extends ServiceImpl<DishDetailMapper, DishDetail> implements DishDetailService {
 
     @Autowired
     private DishDetailMapper dishDetailMapper;
