@@ -15,4 +15,7 @@ public interface OrderService extends IService<Sales> {
      * 查询当前用户订单列表
      */
     List<Sales> getOrderList(Integer userNo);
+
+    //取消订单
+    void cancelOrder(Integer saleId, Integer loginUserId);
 }

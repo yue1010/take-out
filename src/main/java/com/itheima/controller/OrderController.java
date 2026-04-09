@@ -88,4 +88,21 @@ public class OrderController {
             return Result.error("系统异常：" + e.getMessage());
         }
     }
+    @PutMapping("/cancel")
+    public Result cancel(@RequestBody Map<String, Object> map, HttpServletRequest request) {
+        try {
+            // 获取当前登录用户ID
+            String token = request.getHeader("Authorization");
+            Integer loginUserId = JwtUtil.getUserIdFromToken(token);
+
+            // 从 map 里直接取出 sale_id
+            Integer sale_id = (Integer) map.get("saleId");
+
+            // 调用 service
+            orderService.cancelOrder(sale_id, loginUserId);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
 }

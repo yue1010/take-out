@@ -19,4 +19,5 @@ public class Sales {
     private Integer ridNo;
     private LocalDateTime saleTime;
     private BigDecimal totalAmt;
+    private Integer status;
 }

@@ -27,6 +27,9 @@ public class OrderServiceImpl extends ServiceImpl<SalesMapper, Sales> implements
     @Resource
     private DishDetailMapper dishDetailMapper;
 
+    @Resource
+    private SalesMapper salesMapper;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Sales createOrder(Map<String, Object> params, Integer userNo) {
@@ -79,5 +82,31 @@ public class OrderServiceImpl extends ServiceImpl<SalesMapper, Sales> implements
         LambdaQueryWrapper<Sales> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Sales::getUserNo, userNo);
         return this.list(wrapper);
+    }
+
+    @Override
+    public void cancelOrder(Integer saleId, Integer loginUserId){
+        // 1. 查询订单
+        Sales sales = salesMapper.selectById(saleId);
+        if (sales == null) {
+            throw new RuntimeException("订单不存在");
+        }
+
+        // 2. 只能取消自己的订单
+        if (!sales.getUserNo().equals(loginUserId)) {
+            throw new RuntimeException("只能取消自己的订单");
+        }
+
+        // 3. 只有待接单(1)可以取消
+        if (!sales.getStatus().equals(1)) {
+            throw new RuntimeException("只有待接单订单可以取消");
+        }
+
+        // 4. 修改为已取消(5)
+        Sales update = new Sales();
+        update.setSaleId(saleId);
+        update.setStatus(5);
+
+        salesMapper.updateById(update);
     }
 }
