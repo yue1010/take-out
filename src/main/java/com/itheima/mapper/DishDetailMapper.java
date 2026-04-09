@@ -1,14 +1,15 @@
 package com.itheima.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.itheima.pojo.DishDetail;
-import com.itheima.pojo.Ingredient;
 import com.itheima.pojo.Ingredient;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
 import java.util.List;
 
 @Mapper
-public interface DishDetailMapper {
+public interface DishDetailMapper extends BaseMapper<DishDetail> {
 
     // 根据 dish_detail_id 查询菜品详情（多表联查）
     // 把参数名从 dish_detail_id 改为 dishDetailId（和驼峰一致）

@@ -75,7 +75,7 @@ public class UserController {
             Map<String, Object> claims = new HashMap<>();
 
             claims.put("usertel", u.getUserTel());
-
+            claims.put("userNo", u.getUserNo());
             String token = JwtUtil.genToken(claims);
             System.out.println("登录成功，token：" + token);
             return Result.success(token);

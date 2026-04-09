@@ -9,10 +9,10 @@ import com.itheima.pojo.DishDetail;
 import com.itheima.pojo.OrderDetail;
 import com.itheima.pojo.Sales;
 import com.itheima.service.OrderService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
