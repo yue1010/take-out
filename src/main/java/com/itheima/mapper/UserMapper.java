@@ -45,4 +45,6 @@ public interface UserMapper {
 
     @Update("UPDATE users SET user_password = #{newPwd} WHERE user_tel = #{usertel}")
     void updatePwd(@Param("usertel") String usertel, @Param("newPwd") String newPwd);
+
+    void update(User user);
 }
