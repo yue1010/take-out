@@ -7,34 +7,39 @@ import Address from '../views/Address.vue'
 const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/login',
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
   },
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: Register,
   },
   {
     path: '/address',
     name: 'Address',
-    component: Address
+    component: Address,
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: () => import('../views/Profile.vue')
-  }
+    component: () => import('../views/Profile.vue'),
+  },
+  {
+    path: '/change-pwd',
+    name: '修改密码',
+    component: () => import('../views/ChangePwd.vue'),
+  },
 ]
 
 const router = createRouter({
   // 👇 只改这一行！！！
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router

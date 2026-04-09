@@ -32,7 +32,7 @@
         <div class="sidebar-avatar">👤</div>
         <span class="welcome-text">欢迎回来</span>
         <a href="/profile" class="sidebar-link active">个人信息管理</a>
-        <a href="#" class="sidebar-link">修改密码</a>
+        <a href="/change-pwd" class="sidebar-link">修改密码</a>
         <a href="/address" class="sidebar-link">收货地址管理</a>
       </div>
 
@@ -123,17 +123,17 @@ const userInfo = reactive({
   userName: '',
   userSex: '',
   createTime: '',
-  updateTime: ''
+  updateTime: '',
 })
 
 const form = reactive({
   userName: '',
-  userSex: ''
+  userSex: '',
 })
 
 const rules = {
   userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  userSex: [{ required: true, message: '请选择性别', trigger: 'change' }]
+  userSex: [{ required: true, message: '请选择性别', trigger: 'change' }],
 }
 
 // 获取个人信息
@@ -208,7 +208,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.info-view { padding: 10px 0; }
+.info-view {
+  padding: 10px 0;
+}
 .info-item {
   display: flex;
   align-items: center;
@@ -216,7 +218,15 @@ onMounted(() => {
   border-bottom: 1px solid #e3f2fd;
   font-size: 15px;
 }
-.info-item label { width: 100px; font-weight: 500; color: #333; }
-.info-item span { color: #666; }
-.info-action { margin-top: 40px; }
+.info-item label {
+  width: 100px;
+  font-weight: 500;
+  color: #333;
+}
+.info-item span {
+  color: #666;
+}
+.info-action {
+  margin-top: 40px;
+}
 </style>
